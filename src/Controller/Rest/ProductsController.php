@@ -58,5 +58,5 @@ class ProductsController extends FOSRestController
 
         return new JsonResponse($result);
     }
-    
+
 }

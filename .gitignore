@@ -6,4 +6,6 @@
 /public/bundles/
 /var/
 /vendor/
+/Command/
+/DataFixtures/
 ###< symfony/framework-bundle ###

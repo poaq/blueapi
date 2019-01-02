@@ -35,7 +35,8 @@ class ProductsRepository extends ServiceEntityRepository
      * @param $data
      * @return bool
      */
-    public function addProduct($data){
+    public function addProduct($data)
+    {
 
         $product = new Products();
         $product->setName($data['name']);
@@ -50,7 +51,8 @@ class ProductsRepository extends ServiceEntityRepository
      * @param $data
      * @return bool
      */
-    public function editProduct($data){
+    public function editProduct($data)
+    {
 
         $product = $this->find($data['id']);
         $product->setName($data['name']);
@@ -65,7 +67,8 @@ class ProductsRepository extends ServiceEntityRepository
      * @param $data
      * @return bool
      */
-    public function deleteProduct($data){
+    public function deleteProduct($data)
+    {
         
         $product = $this->find($data['id']);
         $this->manager->remove($product);
@@ -78,7 +81,8 @@ class ProductsRepository extends ServiceEntityRepository
      * @param $criteria
      * @return Products[]
      */
-    public function findByKey($criteria){
+    public function findByKey($criteria)
+    {
 
         $result = [];
 
@@ -144,25 +148,40 @@ class ProductsRepository extends ServiceEntityRepository
             ;
     }
 
-
+    /**
+     * @param QueryBuilder|null $qb
+     * @return QueryBuilder
+     */
     private function addIsAmountNotNullQueryBuilder(QueryBuilder $qb = null)
     {
         return $this->getOrCreateQueryBuilder($qb)
             ->andWhere('p.amount > 0');
     }
 
+    /**
+     * @param QueryBuilder|null $qb
+     * @return QueryBuilder
+     */
     private function addIsAmountHigherThanFive(QueryBuilder $qb = null)
     {
         return $this->getOrCreateQueryBuilder($qb)
             ->andWhere('p.amount > 5');
     }
 
+    /**
+     * @param QueryBuilder|null $qb
+     * @return QueryBuilder
+     */
     private function addIsAmountIsNullQueryBuilder(QueryBuilder $qb = null)
     {
         return $this->getOrCreateQueryBuilder($qb)
             ->andWhere('p.amount = 0');
     }
 
+    /**
+     * @param QueryBuilder|null $qb
+     * @return QueryBuilder
+     */
     private function getOrCreateQueryBuilder(QueryBuilder $qb = null)
     {
         return $qb ?: $this->createQueryBuilder('p');
