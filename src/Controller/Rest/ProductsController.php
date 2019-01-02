@@ -4,6 +4,7 @@ namespace App\Controller\Rest;
 
 use App\Entity\Products;
 use App\Repository\ProductsRepository;
+use function Couchbase\defaultDecoder;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\View\ViewHandlerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -14,14 +15,6 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 
 class ProductsController extends FOSRestController
 {
-
-    /*
-    TODO:
-    getProduct
-    aviable
-    notaviable
-    aviableover5
-    */
 
     /**
      * @Rest\Post("/Products/{name}/{amount}", name="product_add")
@@ -56,4 +49,14 @@ class ProductsController extends FOSRestController
         return new JsonResponse('delete '.$data['id']);
     }
 
+    /**
+     * @Rest\Get("/Products/{criteria}", name="product_get")
+     */
+    public function getProduct($criteria = [], ProductsRepository $repository): JsonResponse
+    {
+        $result = $repository->findByKey($criteria);
+
+        return new JsonResponse($result);
+    }
+    
 }

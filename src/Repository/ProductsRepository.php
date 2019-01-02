@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Products;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -29,34 +30,7 @@ class ProductsRepository extends ServiceEntityRepository
         $this->manager = $manager;
     }
 
-    // /**
-    //  * @return Products[] Returns an array of Products objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Products
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
     /**
      * @param $data
      * @return bool
@@ -98,6 +72,100 @@ class ProductsRepository extends ServiceEntityRepository
         $this->manager->flush();
 
         return true;
+    }
+
+    /**
+     * @param $criteria
+     * @return Products[]
+     */
+    public function findByKey($criteria){
+
+        $result = [];
+
+        switch ($criteria){
+            case 0:
+                $products = $this->findAllProductsWithAmountZero();
+                break;
+            case 1:
+                $products = $this->findAllProductsOrderedByNewest();
+                break;
+            case 2:
+                $products = $this->findAllProductsWithAmountOverFive();
+                break;
+            default:
+                $products = $this->findAllProductsOrderedByNewest();
+        }
+
+
+        foreach ($products as $product) {
+            $result[$product->getId()] = [
+                'name' => $product->getName(),
+                'amount' => $product->getAmount()
+            ];
+
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return Products[]
+     */
+    private function findAllProductsOrderedByNewest()
+    {
+        return $this->addIsAmountNotNullQueryBuilder()
+            ->orderBy('p.id','DESC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    /**
+     * @return Products[]
+     */
+    private function findAllProductsWithAmountOverFive()
+    {
+        return $this->addIsAmountHigherThanFive()
+            ->orderBy('p.id','DESC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    /**
+     * @return Products[]
+     */
+    private function findAllProductsWithAmountZero()
+    {
+        return $this->addIsAmountIsNullQueryBuilder()
+            ->orderBy('p.id','DESC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+
+    private function addIsAmountNotNullQueryBuilder(QueryBuilder $qb = null)
+    {
+        return $this->getOrCreateQueryBuilder($qb)
+            ->andWhere('p.amount > 0');
+    }
+
+    private function addIsAmountHigherThanFive(QueryBuilder $qb = null)
+    {
+        return $this->getOrCreateQueryBuilder($qb)
+            ->andWhere('p.amount > 5');
+    }
+
+    private function addIsAmountIsNullQueryBuilder(QueryBuilder $qb = null)
+    {
+        return $this->getOrCreateQueryBuilder($qb)
+            ->andWhere('p.amount = 0');
+    }
+
+    private function getOrCreateQueryBuilder(QueryBuilder $qb = null)
+    {
+        return $qb ?: $this->createQueryBuilder('p');
     }
 
 }
