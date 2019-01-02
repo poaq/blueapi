@@ -5,6 +5,7 @@ namespace App\Security;
 use App\Repository\ApiTokenRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
@@ -69,7 +70,11 @@ class ApiTokenAuthenticator extends AbstractGuardAuthenticator
 
     public function start(Request $request, AuthenticationException $authException = null)
     {
-        // not used
+        $data = array(
+            'message' => 'Authentication Required'
+        );
+
+        return new JsonResponse($data, Response::HTTP_UNAUTHORIZED);
     }
 
     public function supportsRememberMe()
