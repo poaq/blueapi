@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Products;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -14,9 +15,18 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class ProductsRepository extends ServiceEntityRepository
 {
-    public function __construct(RegistryInterface $registry)
+
+
+    /**
+     * @var ObjectManager
+     */
+    private $manager;
+
+    public function __construct(RegistryInterface $registry, ObjectManager $manager)
     {
         parent::__construct($registry, Products::class);
+
+        $this->manager = $manager;
     }
 
     // /**
@@ -47,4 +57,47 @@ class ProductsRepository extends ServiceEntityRepository
         ;
     }
     */
+    /**
+     * @param $data
+     * @return bool
+     */
+    public function addProduct($data){
+
+        $product = new Products();
+        $product->setName($data['name']);
+        $product->setAmount($data['amount']);
+        $this->manager->persist($product);
+        $this->manager->flush();
+
+        return true;
+    }
+
+    /**
+     * @param $data
+     * @return bool
+     */
+    public function editProduct($data){
+
+        $product = $this->find($data['id']);
+        $product->setName($data['name']);
+        $product->setAmount($data['amount']);
+        $this->manager->persist($product);
+        $this->manager->flush();
+
+        return true;
+    }
+
+    /**
+     * @param $data
+     * @return bool
+     */
+    public function deleteProduct($data){
+        
+        $product = $this->find($data['id']);
+        $this->manager->remove($product);
+        $this->manager->flush();
+
+        return true;
+    }
+
 }
