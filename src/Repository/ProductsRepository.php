@@ -102,7 +102,8 @@ class ProductsRepository extends ServiceEntityRepository
 
 
         foreach ($products as $product) {
-            $result[$product->getId()] = [
+            $result[] = [
+                'id' => $product->getId(),
                 'name' => $product->getName(),
                 'amount' => $product->getAmount()
             ];

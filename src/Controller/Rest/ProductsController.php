@@ -4,7 +4,6 @@ namespace App\Controller\Rest;
 
 use App\Entity\Products;
 use App\Repository\ProductsRepository;
-use function Couchbase\defaultDecoder;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\View\ViewHandlerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
