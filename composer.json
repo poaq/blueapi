@@ -6,6 +6,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "friendsofsymfony/rest-bundle": "^2.4",
+        "fzaninotto/faker": "^1.8",
         "sensio/framework-extra-bundle": "^5.2",
         "symfony/console": "4.2.*",
         "symfony/dotenv": "4.2.*",
@@ -14,6 +15,7 @@
         "symfony/maker-bundle": "^1.11",
         "symfony/orm-pack": "^1.0",
         "symfony/profiler-pack": "^1.0",
+        "symfony/security-bundle": "4.2.*",
         "symfony/serializer": "4.2.*",
         "symfony/yaml": "4.2.*"
     },
@@ -61,5 +63,8 @@
             "allow-contrib": false,
             "require": "4.2.*"
         }
+    },
+    "require-dev": {
+        "doctrine/doctrine-fixtures-bundle": "^3.1"
     }
 }

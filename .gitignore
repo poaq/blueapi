@@ -1,8 +1,11 @@
 
 ###> symfony/framework-bundle ###
 /.env.local
+/.env
 /.env.*.local
 /public/bundles/
 /var/
 /vendor/
+/Command/
+/DataFixtures/
 ###< symfony/framework-bundle ###
